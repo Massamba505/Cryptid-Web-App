@@ -47,7 +47,7 @@ const Google_Email = (passport)=>{
     });
 };
 
-const Facebook_Email = (passport) => {
+const Facebook_Email = (passport)=>{
     const FACEBOOK_CLIENT_ID = "1216354019390857";
     const FACEBOOK_CLIENT_SECRET = "480713efd2f7b5d741d2390935766641";
 
@@ -55,35 +55,27 @@ const Facebook_Email = (passport) => {
         clientID: FACEBOOK_CLIENT_ID,
         clientSecret: FACEBOOK_CLIENT_SECRET,
         callbackURL: "https://playcryptidweb.azurewebsites.net/auth/facebook/callback",
-        profileFields: ['id', 'emails', 'name'] // Ensure the fields are requested
     },
     async (accessToken, refreshToken, profile, done) => {
         try {
             let user = await User.findOne({ OAuthID: profile.id });
+    
             if (!user) {
-                const email = profile.emails && profile.emails[0] ? profile.emails[0].value : null;
-                if (!email) {
-                    throw new Error('Email not available in Facebook profile');
-                }
                 user = new User({
                     OAuthID: profile.id,
-                    email: email,
+                    email: profile.emails[0].value,
                     username: profile.displayName,
-                    usertType: "user"
                 });
                 await user.save();
             }
+    
             return done(null, user);
         } catch (error) {
-            if (error.message.includes('authorization code has been used')) {
-                console.error('Authorization code has already been used:', error);
-                return done(null, false, { message: 'Authorization code has already been used. Please try logging in again.' });
-            } else {
-                console.error('Error during Facebook OAuth:', error);
-                return done(error, null);
-            }
+            console.error('Error during Facebook OAuth:', error);
+            return done(error, null);
         }
     }));
+    
 
     passport.serializeUser((user, done) => {
         done(null, user.id);
@@ -91,6 +83,7 @@ const Facebook_Email = (passport) => {
 
     passport.deserializeUser(async (id, done) => {
         try {
+            console.log(id);
             const user = await User.findById(id);
             done(null, user);
         } catch (error) {
@@ -98,6 +91,7 @@ const Facebook_Email = (passport) => {
         }
     });
 };
+
 
 module.exports = {
     Google_Email,
