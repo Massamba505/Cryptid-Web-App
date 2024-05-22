@@ -235,6 +235,7 @@ canvas {
   flex: 0;
   border: 2px solid;
   width: 100%;
+  cursor: pointer;
 }
 
 #clues > div{
@@ -266,6 +267,7 @@ canvas {
   justify-content: center;
   background-color: red;
   font-weight: bold;
+  cursor: pointer;
 }
 .master-clue{
   display: flex;
@@ -277,6 +279,7 @@ canvas {
   justify-content: center;
   background-color: red;
   font-weight: bold;
+  cursor: pointer;
 }
 .clue-final{
   display: flex;
@@ -288,6 +291,7 @@ canvas {
   justify-content: center;
   background-color: purple;
   font-weight: bold;
+  cursor: pointer;
 }
 #clue-show{
   width: inherit;
