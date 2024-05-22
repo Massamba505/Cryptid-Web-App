@@ -1,3 +1,5 @@
+//passport.js for fb and google auth
+//importing the requirements for passportfb and passportgoogle
 const FacebookStrategy = require('passport-facebook').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require("../models/user.model");
@@ -46,12 +48,13 @@ const Google_Email = (passport)=>{
 };
 
 const Facebook_Email = (passport)=>{
-    FACEBOOK_CLIENT_ID = "453961490558859";
-    FACEBOOK_CLIENT_SECRET = "7ef3c13a5844b8bb493c04d029b5a7e7";
+    const FACEBOOK_CLIENT_ID = "1216354019390857";
+    const FACEBOOK_CLIENT_SECRET = "480713efd2f7b5d741d2390935766641";
+
     passport.use(new FacebookStrategy({
         clientID: FACEBOOK_CLIENT_ID,
         clientSecret: FACEBOOK_CLIENT_SECRET,
-        callbackURL: "/auth/facebook/callback"
+        callbackURL: "https://playcryptidweb.azurewebsites.net/auth/facebook/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
         try {
@@ -62,7 +65,6 @@ const Facebook_Email = (passport)=>{
                     OAuthID: profile.id,
                     email: profile.emails[0].value,
                     username: profile.displayName,
-                    usertType:"user"
                 });
                 await user.save();
             }
@@ -89,6 +91,7 @@ const Facebook_Email = (passport)=>{
         }
     });
 };
+
 
 module.exports = {
     Google_Email,
