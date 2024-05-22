@@ -232,25 +232,42 @@ function drawTowersAndShacks() {
   coordinates = transformString2(mapCodeValue);
   console.log(coordinates);
   if (coordinates.length == 12) {
-    drawTower("tiles/s1.png", coordinates[0], coordinates[1]); // Replace "tower-image-url" with actual tower image URL
-    drawTower("tiles/s2.png", coordinates[2], coordinates[3]); // Replace "tower-image-url" with actual tower image URL
-    drawTower("tiles/s3.png", coordinates[4], coordinates[5]); // Replace "tower-image-url" with actual tower image URL
-    drawShack("tiles/p1.png", coordinates[6], coordinates[7]); // Replace "shack-image-url" with actual shack image URL
-    drawShack("tiles/p2.png", coordinates[8], coordinates[9]); // Replace "shack-image-url" with actual shack image URL
-    drawShack("tiles/p3.png", coordinates[10], coordinates[11]); // Replace "shack-image-url" with actual shack image URL
+    drawTower("tiles/s1.png", coordinates[0], coordinates[1], "standing stone"); // Replace "tower-image-url" with actual tower image URL
+    drawTower("tiles/s2.png", coordinates[2], coordinates[3], "standing stone"); // Replace "tower-image-url" with actual tower image URL
+    drawTower("tiles/s3.png", coordinates[4], coordinates[5], "standing stone"); // Replace "tower-image-url" with actual tower image URL
+    drawShack("tiles/p1.png", coordinates[6], coordinates[7], "shack"); // Replace "shack-image-url" with actual shack image URL
+    drawShack("tiles/p2.png", coordinates[8], coordinates[9], "shack"); // Replace "shack-image-url" with actual shack image URL
+    drawShack("tiles/p3.png", coordinates[10], coordinates[11], "shack"); // Replace "shack-image-url" with actual shack image URL
   } else {
-    drawTower("tiles/s1.png", coordinates[0], coordinates[1]); // Replace "tower-image-url" with actual tower image URL
-    drawTower("tiles/s2.png", coordinates[2], coordinates[3]); // Replace "tower-image-url" with actual tower image URL
-    drawTower("tiles/s3.png", coordinates[4], coordinates[5]); // Replace "tower-image-url" with actual tower image URL
-    drawTower("tiles/s4.png", coordinates[6], coordinates[7]); // Replace "tower-image-url" with actual tower image URL
-    drawShack("tiles/p1.png", coordinates[8], coordinates[9]); // Replace "shack-image-url" with actual shack image URL
-    drawShack("tiles/p2.png", coordinates[10], coordinates[11]); // Replace "shack-image-url" with actual shack image URL
-    drawShack("tiles/p3.png", coordinates[12], coordinates[13]); // Replace "shack-image-url" with actual shack image URL
-    drawShack("tiles/p4.png", coordinates[14], coordinates[15]); // Replace "shack-image-url" with actual shack image URL
+    drawTower("tiles/s1.png", coordinates[0], coordinates[1], "standing stone"); // Replace "tower-image-url" with actual tower image URL
+    drawTower("tiles/s2.png", coordinates[2], coordinates[3], "standing stone"); // Replace "tower-image-url" with actual tower image URL
+    drawTower("tiles/s3.png", coordinates[4], coordinates[5], "standing stone"); // Replace "tower-image-url" with actual tower image URL
+    drawTower("tiles/s4.png", coordinates[6], coordinates[7], "standing stone"); // Replace "tower-image-url" with actual tower image URL
+    drawShack("tiles/p1.png", coordinates[8], coordinates[9]), "shack"; // Replace "shack-image-url" with actual shack image URL
+    drawShack("tiles/p2.png", coordinates[10], coordinates[11], "shack"); // Replace "shack-image-url" with actual shack image URL
+    drawShack("tiles/p3.png", coordinates[12], coordinates[13], "shack"); // Replace "shack-image-url" with actual shack image URL
+    drawShack("tiles/p4.png", coordinates[14], coordinates[15], "shack"); // Replace "shack-image-url" with actual shack image URL
+  }
+  updateTitles();
+}
+
+
+function updateTitles() {
+  // Loop through all cells and update their titles
+  for (let col = 0; col < 12; col++) {
+    for (let row = 0; row < 9; row++) {
+      const cellClass = `${row},${col}`;
+      const cells = document.getElementsByClassName(cellClass);
+      const cellTitle = rcToString(row, col);
+      var cell = cells[0];
+      cell.title = cellTitle;
+    }
   }
 }
 
+
 function drawTower(imgUrl, r, c) {
+  addStructureToTitle(r,c, "tower");
   var img = new Image();
   img.src = imgUrl;
   img.style.width = "35%";
@@ -261,15 +278,36 @@ function drawTower(imgUrl, r, c) {
     // Find all cells with the specified class
     var cells = document.getElementsByClassName(cellClass);
     // Iterate over all found cells (in case there are multiple cells with the same class)
+    // cells[0].classList.add(what.split(" ")[0]);
+    // cells[0].classList.add(what.split(" ")[1]);
+    // cell[0].setAttribute("tt","ss");
+    // console.log(cells[0]);
     for (var i = 0; i < cells.length; i++) {
       var cell = cells[i];
       // Append the tower image to each found cell
       cell.appendChild(img);
+      // cell[0].classList.add(`${what}`);
     }
   };
 }
 
+function addStructureToTitle(r,c, structure){
+  if(Math.floor(r/3)==0){
+    if(Math.floor(c/6)==0) listOfAllTiles[config[0]][r%3][c%6]+=", "+structure;
+    else listOfAllTiles[config[1]][r%3][c%6]+=", "+structure;
+  } else if (Math.floor(r/3)==1){
+    if(Math.floor(c/6)==0) listOfAllTiles[config[2]][r%3][c%6]+=", "+structure;
+    else listOfAllTiles[config[3]][r%3][c%6]+=", "+structure;
+  } else{
+    if(Math.floor(c/6)==0) listOfAllTiles[config[4]][r%3][c%6]+=", "+structure;
+    else listOfAllTiles[config[5]][r%3][c%6]+=", "+structure;
+  }
+  console.log(listOfAllTiles[config[0]]);
+}
+
 function drawShack(imgUrl, r, c) {
+  addStructureToTitle(r,c,"shack");
+  console.log("i am drawing shack");
   var img = new Image();
   img.src = imgUrl;
   img.style.width = "35%";
@@ -353,12 +391,12 @@ function hover(cell, r,c) {
     var classesArray = Array.from(cell.classList);
     if (classesArray.includes("neg"))
       this.style.backgroundColor = "rgba(255, 0, 0, 0.4)";
-    else this.style.backgroundColor = "rgba(0, 255, 0, 0.4)";
+    else if(looking==false)this.style.backgroundColor = "rgba(0, 255, 0, 0.4)";
   });
 
   cell.addEventListener("mouseleave", function () {
     // Reset background color when mouse leaves
-    this.style.backgroundColor = "rgba(128, 128, 128, 0)"; // Restore initial background color on mouse leave
+    if(looking==false || cell!=currentHex) this.style.backgroundColor = "rgba(128, 128, 128, 0)"; // Restore initial background color on mouse leave
   });
   cell.title = rcToString(r,c);
 }
@@ -367,7 +405,7 @@ function custom_hover(cell, val) {
   console.log(cell);
   cell.addEventListener("mouseenter", function () {
     if (val) this.style.backgroundColor = "rgba(255, 0, 0, 0.4)";
-    else this.style.backgroundColor = "rgba(0, 255, 0, 0.4)";
+    else if(looking==false) this.style.backgroundColor = "rgba(0, 255, 0, 0.4)";
   });
 
   cell.addEventListener("mouseleave", function () {
