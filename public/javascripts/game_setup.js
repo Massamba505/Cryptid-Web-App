@@ -141,7 +141,6 @@ else{
             let h=createPiece("circle");
             let r=document.getElementsByClassName(`cell ${data.cell}`)[0];
             r.addEventListener("mouseenter",()=>{
-                if(looking==false)
                 r.style.backgroundColor="rgba(0, 255, 0, 0.4)";
             });
             
@@ -174,7 +173,6 @@ else{
             let h=createPiece("circle");
             let r=document.getElementsByClassName(`cell ${data.cell}`)[0];
             r.addEventListener("mouseenter",()=>{
-                if(looking==false)
                 r.style.backgroundColor="rgba(0, 255, 0, 0.4)";
             });
             h.style.backgroundColor=data.colour;
